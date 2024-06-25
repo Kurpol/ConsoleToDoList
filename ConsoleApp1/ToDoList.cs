@@ -8,6 +8,7 @@ using ToDoItem;
 
 namespace ToDoList
 {
+
     internal class TodoList
     {
         private List<TodoListItem> list;
@@ -19,12 +20,12 @@ namespace ToDoList
             dictionary = new Dictionary<int, TodoListItem>();
         }
 
-        public void AddNewTask(int priority, string tasktext) 
+        public void AddNewTask(int priority, string taskText)
         {
-            TodoListItem newItem = new TodoListItem {
-
+            TodoListItem newItem = new TodoListItem
+            {
                 Id = list.Count > 0 ? list.Max(x => x.Id) + 1 : 1,
-                Task = tasktext,
+                Task = taskText,
                 Priority = priority,
                 Date = DateTime.Now,
             };
@@ -32,48 +33,57 @@ namespace ToDoList
             dictionary[newItem.Id] = newItem;
         }
 
-        public void UpdateTask(int id, string newtasktext, int newpriority)
+        public void UpdateTask(int id, string newTaskText, int newPriority)
         {
             if (dictionary.ContainsKey(id))
             {
-                TodoListItem newItem = dictionary[id];
-                newItem.Task = newtasktext;
-                newItem.Priority = newpriority; 
+                TodoListItem item = dictionary[id];
+                item.Task = newTaskText;
+                item.Priority = newPriority;
 
-                var index = list.FindIndex(x => x.Id == id);
+                int index = list.FindIndex(x => x.Id == id);
                 if (index != -1)
                 {
-                    list[index] = newItem;
+                    list[index] = item;
                 }
+            }
+            else
+            {
+                Console.WriteLine("Task ID not found.");
             }
         }
 
-        public void RemoveTask(int id) 
+        public void RemoveTask(int id)
         {
             if (dictionary.ContainsKey(id))
             {
                 dictionary.Remove(id);
                 list.RemoveAll(x => x.Id == id);
             }
+            else
+            {
+                Console.WriteLine("Task ID not found.");
+            }
         }
 
         public List<TodoListItem> GetAllList()
-        { return list; }
+        {
+            return list;
+        }
 
         public Dictionary<int, TodoListItem> GetAllDictionary()
-        { return dictionary; }
-
+        {
+            return dictionary;
+        }
 
         public List<TodoListItem> SortByDate()
         {
             return list.OrderBy(x => x.Date).ToList();
         }
 
-        // Сортировка по приоритетам
         public List<TodoListItem> SortByPriority()
         {
             return list.OrderBy(x => x.Priority).ToList();
         }
-
     }
 }
